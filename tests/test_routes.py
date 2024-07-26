@@ -63,7 +63,8 @@ class TestRoutes(TestCase):
 
     def test_only_author_can_work_with_notes(self):
         """Проверяется случай, когда только автор
-        может работать со своими заметками."""
+        может работать со своими заметками.
+        """
         url_list = copy(self.url_list_for_author)
         url_list = [self.url_creator(url[0], url[1]) for url in url_list]
         user_status_choice = (
