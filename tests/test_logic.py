@@ -56,6 +56,7 @@ class TestEditDeleteContentCase(TestCase):
             'title': cls.NOTE_TITLE,
             'text': cls.NOTE_TEXT}
         cls.new_form = {
+            'title': cls.NOTE_TITLE,
             'text': cls.NEW_NOTE_TEXT
         }
         cls.author = User.objects.create(username='author')
@@ -88,20 +89,14 @@ class TestEditDeleteContentCase(TestCase):
         self.test_note.refresh_from_db()
         self.assertEqual(self.test_note.text, self.NOTE_TEXT)
 
-    # def test_author_can_edit_note(self):
-    #     exact_post = self.author_client.get(
-    #         reverse('notes:detail', kwargs={'slug': self.test_note.slug}))
-    #     pp(exact_post.context['object'].author)
-    #     response = self.author_client.post(
-    #         self.edit_note_url,
-    #         data=self.new_form
-    #     )
-    #     # self.assertRedirects(response, reverse('notes:success'))
-    #     self.test_note.refresh_from_db()
-    #     pp(exact_post.context['object'].text)
-
-        # print(self.test_note.text)
-        # self.assertEqual(self.test_note.text, self.NEW_NOTE_TEXT)
+    def test_author_can_edit_note(self):
+        response = self.author_client.post(
+            self.edit_note_url,
+            data=self.new_form
+        )
+        self.assertRedirects(response, reverse('notes:success'))
+        self.test_note.refresh_from_db()
+        self.assertEqual(self.test_note.text, self.NEW_NOTE_TEXT)
 
     def test_user_cant_delete_note_of_another_user(self):
         self.auth_client.delete(
